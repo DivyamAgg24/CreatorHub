@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
-import { createEditor, Descendant, Editor, Transforms, Element as SlateElement, Node, Text, BaseEditor } from 'slate';
+import React, { useCallback, useMemo, useEffect} from 'react';
+import { createEditor, Descendant, Editor, Transforms, Element as SlateElement, Text, BaseEditor } from 'slate';
 import { Slate, Editable, withReact, useSlate, ReactEditor } from 'slate-react';
 import { withHistory } from 'slate-history';
 import {
@@ -246,20 +246,6 @@ const RichTextEditor = ({
     const renderElement = useCallback((props: any) => <Element {...props} />, []);
     const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
     const editor = useMemo(() => withImages(withHistory(withReact(createEditor()))), []);
-    const isInitialMount = useRef(true);
-
-
-    // Create local state to track editor value changes
-    // const [internalValue, setInternalValue] = useState<Descendant[]>([]);
-
-
-    // // Sync internal state with props
-    // useEffect(() => {
-    //     if (value && value.length > 0) {
-    //         setInternalValue(value);
-    //         // onChange(value)
-    //     }
-    // }, [value])
 
     console.log(JSON.stringify(value))
     useEffect(() => {
@@ -318,7 +304,6 @@ const RichTextEditor = ({
         [editor]
     );
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        const { selection } = editor;
 
         if (event.key === 'Enter') {
             const [match] = Editor.nodes(editor, {
@@ -340,27 +325,7 @@ const RichTextEditor = ({
 
     return (
         <div className="border border-gray-300 rounded-md bg-white">
-            {/* {internalValue.length > 0 && <Slate editor={editor} initialValue={safeValue} onChange={handleChange}>
-                <div className="flex flex-wrap items-center p-2 border-b border-gray-300 bg-gray-50">
-                    <FormatButton format="bold" icon={<Bold size={16} />} />
-                    <FormatButton format="italic" icon={<Italic size={16} />} />
-                    <FormatButton format="underline" icon={<Underline size={16} />} />
-                    <div className="w-px h-6 mx-2 bg-gray-300" />
-                    <BlockButton format="bulleted-list" icon={<List size={16} />} />
-                    <LinkButton />
-                    <ImageButton />
-                </div>
-                <Editable
-                    renderElement={renderElement}
-                    renderLeaf={renderLeaf}
-                    placeholder="Write your content here..."
-                    className="p-4 min-h-[200px] prose max-w-none"
-                    spellCheck
-                    autoFocus
-                    onKeyDown={handleKeyDown}
-                    onPaste={handlePaste}
-                />
-            </Slate>} */}
+            
             <Slate editor={editor} initialValue={initialEditorValue} onChange={handleChange}>
                 <div className="flex flex-wrap items-center p-2 border-b border-gray-300 bg-gray-50">
                     <FormatButton format="bold" icon={<Bold size={16} />} />

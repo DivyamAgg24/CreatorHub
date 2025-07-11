@@ -4,13 +4,6 @@ import { PlusCircle, Search } from "lucide-react";
 import { Idea, useIdeas } from "../../context/IdeasContext";
 import IdeaCard from "../../components/ui/IdeaCard";
 import CreateIdea from "../../components/ui/CreateIdea";
-import { Node, Descendant } from "slate"
-
-const getPlainTextFromNodes = (nodes: Descendant[]): string => {
-    return nodes
-      .map(node => Node.string(node))
-      .join(" ");
-  };
 
   export const Ideas = () => {
     const { ideas } = useIdeas();

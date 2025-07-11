@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { Descendant } from 'slate';
 
 interface UseAIContentStreamProps {
@@ -137,75 +136,6 @@ export const useAIContentStream = ({
         error
     };
 };
-
-// Helper function to convert plain text to Slate format
-// export const textToSlateNodes = (text: string): Descendant[] => {
-
-//     try {
-//         const jsonObj = JSON.parse(text);
-
-//         // If this is our platform-specific JSON format, return empty array
-//         // as we'll handle this specially in PlatformSpecificContent
-//         if (jsonObj.platforms) {
-//             return [];
-//         }
-//     } catch (e) {
-//         // Not valid JSON, continue with normal text processing
-//     }
-
-//     // If no text, return a single empty paragraph
-//     if (!text || text.trim() === '') {
-//         return [{
-//             type: 'paragraph',
-//             children: [{ text: '' }]
-//         }];
-//     }
-
-//     console.log("Text: ", text)
-//     // Split by double newlines to create paragraphs
-//     const paragraphs = text.split(/\n\n+/);
-
-//     // Map paragraphs to Slate nodes
-//     const nodes: Descendant[] = paragraphs.map(paragraph => {
-//         // Trim the paragraph and handle empty paragraphs
-//         const trimmedParagraph = paragraph.trim();
-
-//         // If paragraph is empty after trimming, return an empty paragraph
-//         if (trimmedParagraph === '') {
-//             return {
-//                 type: 'paragraph',
-//                 children: [{ text: '' }]
-//             };
-//         }
-
-//         // Handle multiple lines within a paragraph
-//         const lines = trimmedParagraph.split(/\n/);
-
-//         // If multiple lines, create a paragraph with line breaks
-//         if (lines.length > 1) {
-//             return {
-//                 type: 'paragraph',
-//                 children: lines.flatMap((line, index) => [
-//                     { text: line },
-//                     // Add a soft line break between lines, except for the last line
-//                     ...(index < lines.length - 1 ? [{ text: '\n' }] : [])
-//                 ])
-//             };
-//         }
-
-//         // Single line paragraph
-//         return {
-//             type: 'paragraph',
-//             children: [{ text: trimmedParagraph }]
-//         };
-//     });
-
-//     // Ensure at least one paragraph exists
-//     return nodes.length > 0 ? nodes : [{
-//         type: 'paragraph',
-//         children: [{ text: '' }]
-//     }];
-// };
 
 // Helper function for cleaning AI response JSON
 export const cleanAIResponse = (response: string): string => {

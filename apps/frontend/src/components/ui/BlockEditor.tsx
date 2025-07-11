@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -8,7 +8,7 @@ import Youtube from '@tiptap/extension-youtube';
 import { Slash, Bold, Italic, List, ListOrdered, Heading1, Heading2, Code, Quote, Check, Grip, Plus, Image as ImageIcon, Video, Link as LinkIcon, X } from 'lucide-react';
 
 const NotionLikeEditor = () => {
-    const [showBubbleMenu, setShowBubbleMenu] = useState(false);
+    const [, setShowBubbleMenu] = useState(false);
     const [showBlockMenu, setShowBlockMenu] = useState(false);
     const [blockMenuPosition, setBlockMenuPosition] = useState({ top: 0, left: 0 });
     const [showLinkMenu, setShowLinkMenu] = useState(false);

@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, ReactNode, useEffect } from "react";
-import { EventInput, DateSelectArg } from '@fullcalendar/core';
+import { EventInput } from '@fullcalendar/core';
 import axios from 'axios';
 
 // Define the Event type that matches our Prisma schema
@@ -23,7 +23,7 @@ type EventsContextType = {
     loading: boolean;
     error: string | null;
     fetchEvents: () => Promise<void>;
-    addEvent: (event: Omit<CalendarEvent, 'id'| "userId">) => Promise<CalendarEvent | null>;
+    addEvent: (event: Omit<CalendarEvent, 'id' | "userId">) => Promise<CalendarEvent | null>;
     updateEvent: (updatedEvent: CalendarEvent) => Promise<boolean>;
     deleteEvent: (eventId: string) => Promise<boolean>;
     getEventsByIdeaId: (ideaId: string) => CalendarEvent[];
@@ -63,12 +63,12 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
     const fetchEvents = async () => {
         setLoading(true);
         setError(null);
-        
+
         try {
             const response = await axios.get('http://localhost:3000/v1/events/getEvents', {
                 headers: { authorization: localStorage.getItem("token") }
             });
-            
+
             if (response.data.success) {
                 // Ensure dates are properly parsed from strings
                 const parsedEvents = response.data.data.map((event: any) => ({
@@ -104,21 +104,15 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
                 start: formatDateString(event.start),
                 end: event.end ? formatDateString(event.end) : undefined
             };
-            
+
             console.log('Sending event to API:', formattedEvent);
             const response = await axios.post('http://localhost:3000/v1/events/createEvent', formattedEvent, {
                 headers: { authorization: localStorage.getItem("token") }
             });
-            
+
             if (response.data.success) {
-                const newEvent = {
-                    ...response.data.data,
-                    start: new Date(response.data.data.start),
-                    end: response.data.data.end ? new Date(response.data.data.end) : undefined,
-                    createdAt: response.data.data.createdAt ? new Date(response.data.data.createdAt) : undefined,
-                    updatedAt: response.data.data.updatedAt ? new Date(response.data.data.updatedAt) : undefined
-                };
-            await fetchEvents()
+
+                await fetchEvents()
             } else {
                 // Log more detailed error information
                 console.error("API error creating event:", response.data);
@@ -136,7 +130,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             return null;
         }
     };
-    
+
     // Helper function to ensure consistent date formatting
     const formatDateString = (date: Date | string): string => {
         if (typeof date === 'string') {
@@ -160,7 +154,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
                 start: formatDateString(updatedEvent.start),
                 end: updatedEvent.end ? formatDateString(updatedEvent.end) : undefined
             };
-            
+
             console.log('Sending updated event to API:', formattedEvent);
             const response = await axios.put(
                 `http://localhost:3000/v1/events/updateEvent/${updatedEvent.id}`,
@@ -168,16 +162,10 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
                 headers: { authorization: localStorage.getItem("token") }
             }
             );
-            
+
             if (response.data.success) {
-                const updated = {
-                    ...response.data.data,
-                    start: new Date(response.data.data.start),
-                    end: response.data.data.end ? new Date(response.data.data.end) : undefined,
-                    updatedAt: new Date()
-                };
-                
-            await fetchEvents()
+
+                await fetchEvents()
             } else {
                 // Log more detailed error information
                 console.error("API error updating event:", response.data);
@@ -202,7 +190,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             const response = await axios.delete(`http://localhost:3000/v1/events/deleteEvent/${eventId}`, {
                 headers: { authorization: localStorage.getItem("token") }
             });
-            
+
             if (response.data.success) {
                 await fetchEvents()
                 return true
@@ -217,7 +205,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
 
     // Get events linked to a specific idea
     const getEventsByIdeaId = (ideaId: string): CalendarEvent[] => {
-        return events.filter(event => 
+        return events.filter(event =>
             event.ideaIds && event.ideaIds.includes(ideaId)
         );
     };
@@ -231,7 +219,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             }, {
                 headers: { authorization: localStorage.getItem("token") }
             });
-            
+
             if (response.data.success) {
                 // Update local state
                 setEvents(prev => prev.map(event => {
@@ -256,7 +244,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             return false;
         }
     };
-    
+
     // Unlink an event from an idea
     const unlinkEventFromIdea = async (eventId: string, ideaId: string): Promise<boolean> => {
         try {
@@ -266,7 +254,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             }, {
                 headers: { authorization: localStorage.getItem("token") }
             });
-            
+
             if (response.data.success) {
                 setEvents(prev => prev.map(event => {
                     if (event.id === eventId && event.ideaIds) {
@@ -280,7 +268,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
                 }));
                 return true;
             }
-            
+
             // Fallback implementation if API endpoint doesn't exist yet
             setEvents(prev => prev.map(event => {
                 if (event.id === eventId && event.ideaIds) {
@@ -295,7 +283,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             return true;
         } catch (err) {
             console.error("Error unlinking event from idea:", err);
-            
+
             // Even if API fails, update local state
             setEvents(prev => prev.map(event => {
                 if (event.id === eventId && event.ideaIds) {
@@ -307,12 +295,12 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
                 }
                 return event;
             }));
-            
+
             setError("Failed to unlink event from idea on server, but updated locally");
             return true;
         }
     };
-    
+
     // Get events formatted for FullCalendar
     const getEventsForFullCalendar = (): EventInput[] => {
         return events.map(convertToEventInput);

@@ -270,7 +270,7 @@ const PlatformSpecificContent: React.FC<{
     };
 
     // Handle editor content change
-    const handleEditorChange = (value: Descendant[], updatedAIResponse: AIResponse | null) => {
+    const handleEditorChange = (value: Descendant[], _updatedAIResponse: AIResponse | null) => {
         setEditorContent(value);
         onChange(value, parsedResponse);
     };

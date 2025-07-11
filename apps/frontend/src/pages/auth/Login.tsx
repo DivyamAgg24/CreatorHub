@@ -74,14 +74,6 @@ const Login: React.FC = () => {
                                 leftIcon={<Lock size={16} />}
                             />
 
-                            {/* <div className="text-right">
-                                <Link
-                                    to="/forgot-password"
-                                    className="text-sm font-medium text-(--primary-600) hover:text-(--primary-700) dark:text-(--primary-400) dark:hover:text-(--primary-300)"
-                                >
-                                    Forgot password?
-                                </Link>
-                            </div> */}
                         </CardContent>
                         <CardFooter className="flex flex-col space-y-4">
                             <Button

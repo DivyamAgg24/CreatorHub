@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CalendarEvent } from '../../context/EventsContext';
-import { DateSelectArg, EventClickArg } from '@fullcalendar/core';
+import { DateSelectArg } from '@fullcalendar/core';
 
 interface EventModalProps {
     isOpen: boolean;
