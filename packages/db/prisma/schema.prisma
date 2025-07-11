@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "./../../../node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    name      String?
+    email     String?  @unique
+    password  String
+    ideas     Idea[] // Changed from '
+    events    Event[] // User's calendar events
+    createdAt DateTime @default(now())
+}
+
+model Idea {
+    id              String   @id @default(uuid())
+    title           String
+    status          String
+    tags            String[] // Arrays of simple types like String are supported
+    content         Json // Store Slate's Descendant[] as JSON
+    userId          Int // Foreign key to User
+    user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    platformContent Json?
+    // Optional connection to events - ideas can be linked to scheduled events
+    events          Event[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Event {
+    id          String    @id @default(uuid())
+    title       String
+    start       DateTime
+    end         DateTime?
+    allDay      Boolean   @default(false)
+    description String?
+
+    // Color for the event (can match with idea status colors)
+    color String?
+
+    // Relationship to user
+    userId Int
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    // Optional relationship to an idea (events can be linked to ideas)
+    ideas Idea[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
